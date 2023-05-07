@@ -9,7 +9,7 @@
             </div>
 
             <form action="/" method="post">
-                <div class="flex items-center gap-3">
+                <d iv class="flex items-center gap-3">
                     <div class="w-full">
                         <input
                             class="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -35,7 +35,7 @@
 
 
 
-                </div>
+                </d>
             </form>
         </div>
 
