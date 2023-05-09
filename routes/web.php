@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 // frontend
 Route::get('/', 'App\Http\Controllers\PagesController@index')->name('pages.index');
+
+Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
+Route::patch('update-cart', [CartController::class, 'update'])->name('update.cart');
+Route::delete('remove-from-cart', [CartController::class, 'remove'])->name('remove.from.cart');
+
+Route::post('save-cart', [CartController::class, 'save'])->name('save.cart');
 
 // check middleware  auth
 Route::group(['middleware' => 'auth'], function () {

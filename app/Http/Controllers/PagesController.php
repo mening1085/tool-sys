@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tools;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.frontend.index');
+        $data = Tools::when($request->keyword, function ($q) use ($request) {
+            $q->where('title', 'LIKE', '%' . $request->keyword . '%');
+        })->paginate(8);
+        return view('pages.frontend.index', compact('data'));
     }
 
     public function dashboard()
