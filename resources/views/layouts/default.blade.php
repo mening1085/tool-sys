@@ -52,20 +52,27 @@
             </div>
 
             <div class="order-2 md:order-3 flex items-center" id="nav-content">
-
-                <a class="inline-block no-underline hover:text-black" href="#">
-                    <i class="fa-solid fa-user"></i>
-                </a>
-                {{-- <div class="relative">
-                    <a class="pl-3  inline-block no-underline hover:text-black" href="#">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <div
-                            class="absolute -top-3 -right-3 w-5 h-5 rounded-full bg-red-500 text-xs text-white flex justify-center items-center">
-                            {{ count((array) session('cart')) }}
-                        </div>
+                @if (Auth::user())
+                    <span class="inline-block no-underline">
+                        {{-- <i class="fa-solid fa-user text-2xl"></i> --}}
+                        สวัสดีคุณ : {{ Auth::user()->name }}
+                    </span>
+                    <span class="mx-3">|</span>
+                    <form method="GET" action="{{ route('auth.logout') }}">
+                        @csrf
+                        <a :href="route('logout')" class="inline-block no-underline hover:text-black cursor-pointer"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            ออกจากระบบ
+                        </a>
+                    </form>
+                @else
+                    <a class="inline-block no-underline hover:text-black mr-3" href="{{ route('auth.login') }}">
+                        <i class="fas fa-sign-in-alt"></i>
+                        เข้าสู่ระบบ
                     </a>
-                </div> --}}
-
+                @endif
 
             </div>
         </div>

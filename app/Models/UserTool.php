@@ -14,5 +14,16 @@ class UserTool extends Model
     protected $fillable = [
         'user_id',
         'tool_id',
+        'qty'
     ];
+
+    public function tools()
+    {
+        return $this->belongsTo(Tools::class, 'tool_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -124,19 +124,23 @@
                                         </td>
                                         <td class="border">
                                             <div class="flex justify-center items-center">
-                                                <span id="qtyTxt">{{ $item['qty'] }}</span>
-                                                <input hidden id="{{ 'qtyInput' . $id }}"
-                                                    class="border rounded w-14 text-center" type="number"
+                                                {{-- <span id="{{ 'qtyTxt' . $id }}">{{ $item['qty'] }}</span> --}}
+                                                <input id="{{ 'qtyInput' . $id }}"
+                                                    class="border qty rounded w-14 text-center update-cart" type="number"
                                                     value="{{ $item['qty'] }}" name="qty" />
 
                                             </div>
                                         </td>
                                         <td class="border">
                                             <div class="flex justify-around items-center">
-                                                <button onclick="onEdit('qtyInput' . $id)"
+                                                {{-- <button id="{{ 'btnEdit' . $id }}"
                                                     class="btn btn-danger btn-sm edit-from-cart">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </button>
+                                                <button type="button" id="{{ 'btnUpdate' . $id }}"
+                                                    class="btn hidden btn-danger btn-sm update-cart">
+                                                    <i class="fa-solid fa-floppy-disk"></i>
+                                                </button> --}}
 
                                                 <button class="btn btn-danger btn-sm remove-from-cart">
                                                     <i class="fa-solid fa-trash"></i>
@@ -146,7 +150,14 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="3" class="text-center border p-5">
+                                        <h1>ไม่พบรายการ</h1>
+                                    </td>
+                                </tr>
                             @endif
+
                         </tbody>
                     </table>
                     <button
@@ -160,15 +171,15 @@
 
     </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(".update-cart").change(function(e) {
             e.preventDefault();
-
             var ele = $(this);
 
             $.ajax({
                 url: '{{ route('update.cart') }}',
-                method: "patch",
+                method: "post",
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: ele.parents("tr").attr("data-id"),
@@ -200,22 +211,22 @@
             // }
         });
 
-        // edit-from-cart
-        $(".edit-from-cart").click(function(e) {
-            e.preventDefault();
+        @if (Session::has('save-success'))
+            swal({
+                title: "Success!",
+                text: "{{ Session::get('save-success') }}",
+                icon: "success",
+                button: "OK",
+            });
+        @endif
 
-            var ele = $(this);
-            console.log(ele);
-            console.log(ele.parents("tr").find(".qty").val());
-        });
-
-        function onEdit(id) {
-            var qtyTxt = document.getElementById('qtyTxt');
-            var qtyInput = document.getElementById(id);
-
-            // remove hidden 
-            qtyTxt.classList.add('hidden');
-            qtyInput.classList.remove('hidden');
-        }
+        @if (Session::has('save-error'))
+            swal({
+                title: "Failed!",
+                text: "{{ Session::get('save-error') }}",
+                icon: "error",
+                button: "OK",
+            });
+        @endif
     </script>
 @endsection

@@ -17,7 +17,11 @@
                         <tr>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase ">
-                                ชื่อ
+                                ชื่อผู้ยืม
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase  text-center">
+                                รายการ
                             </th>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase  text-center">
@@ -48,23 +52,27 @@
                                     <div class="flex items-center">
                                         <div class="ml-3">
                                             <p class="text-gray-900 whitespace-no-wrap">
-                                                {{ $item->title }}
+                                                {{ $item->user->name }}
                                             </p>
                                         </div>
                                     </div>
                                 </td>
                                 <td
                                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-900 whitespace-no-wrap text-center">
+                                    {{ $item->tools->title }}
+                                </td>
+                                <td
+                                    class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-900 whitespace-no-wrap text-center">
                                     {{ $item->qty }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white flex justify-center">
-                                    <img class="rounded-lg object-cover w-20 h-20" src="{{ url('images/' . $item->image) }}"
-                                        alt="">
+                                    <img class="rounded-lg object-cover w-20 h-20"
+                                        src="{{ url('images/' . $item->tools->image) }}" alt="">
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <p
                                         class="text-gray-900 whitespace-no-wrap text-center rounded py-1 @if ($item->status == 1) bg-green-200 @else bg-red-200 @endif">
-                                        {{ $item->status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน' }}
+                                        {{ $item->status == 1 ? 'อนุมัติ' : 'รออนุมัติ' }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">

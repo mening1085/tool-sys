@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function index()
     {
         if (auth()->check()) {
-            return redirect()->route('tools.index');
+            return redirect()->route('pages.index');
         }
         return view('login');
     }
@@ -18,8 +18,14 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (auth()->attempt($credentials)) {
-            return redirect()->route('tools.index');
+            // if role is admin
+            if (auth()->user()->role == 1) {
+                return redirect()->route('tools.index');
+            }
+            // if role is user
+            return redirect()->route('pages.index');
         }
+
         return redirect()->route('login');
     }
 

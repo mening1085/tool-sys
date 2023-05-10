@@ -15,6 +15,11 @@ class PagesController extends Controller
         return view('pages.frontend.index', compact('data'));
     }
 
+    public function success()
+    {
+        return view('pages.frontend.success');
+    }
+
     public function dashboard()
     {
         return view('pages.home');

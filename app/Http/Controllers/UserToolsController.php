@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tools;
+use App\Models\UserTool;
 use App\Models\UserTools;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,14 +12,15 @@ class UserToolsController extends Controller
 {
     public function index()
     {
-        $data = Tools::latest()->paginate(5);
-        return view('pages.tools.index', compact('data'))
+        $data = UserTool::with(['tools', 'user'])->latest()->paginate(5);
+
+        return view('pages.user-tools.index', compact('data'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     public function create()
     {
-        return view('pages.tools.create');
+        return view('pages.user-tools.create');
     }
 
     public function store(Request $request)
@@ -34,7 +36,7 @@ class UserToolsController extends Controller
 
     public function edit(Tools $userTool)
     {
-        return view('pages.tools.edit', compact('tools'));
+        return view('pages.user-tools.edit', compact('tools'));
     }
 
     public function update(Request $request, Tools $userTool)

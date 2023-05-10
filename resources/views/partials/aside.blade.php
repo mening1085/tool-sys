@@ -60,8 +60,7 @@
             Calendar
         </a>
     </nav>
-    <a href="/admin/logout"
-        class="absolute w-full logout-btn bottom-0  text-white flex items-center justify-center py-4">
+    <a href="/logout" class="absolute w-full logout-btn bottom-0  text-white flex items-center justify-center py-4">
         <i class="fas fa-sign-out-alt mr-3"></i>
         Logout
     </a>
