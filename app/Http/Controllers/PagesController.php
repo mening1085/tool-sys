@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tools;
+use App\Models\UserTool;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -15,9 +16,10 @@ class PagesController extends Controller
         return view('pages.frontend.index', compact('data'));
     }
 
-    public function success()
+    public function history()
     {
-        return view('pages.frontend.success');
+        $data = UserTool::where('user_id', auth()->user()->id)->get();
+        return view('pages.frontend.history', compact('data'));
     }
 
     public function dashboard()

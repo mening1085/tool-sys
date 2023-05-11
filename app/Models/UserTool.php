@@ -11,13 +11,14 @@ class UserTool extends Model
 
     protected $table = 'user_tool';
     protected $primary = 'id';
+    protected $with = ['tool', 'user'];
     protected $fillable = [
         'user_id',
         'tool_id',
         'qty'
     ];
 
-    public function tools()
+    public function tool()
     {
         return $this->belongsTo(Tools::class, 'tool_id');
     }

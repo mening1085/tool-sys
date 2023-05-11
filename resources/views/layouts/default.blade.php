@@ -41,8 +41,6 @@
     <!--Nav-->
     <nav id="header" class="w-full z-30 top-0 py-1 bg-gray-200">
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
-
-
             <div class="order-1 md:order-2">
                 <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
                     href="/">
@@ -57,6 +55,12 @@
                         {{-- <i class="fa-solid fa-user text-2xl"></i> --}}
                         สวัสดีคุณ : {{ Auth::user()->name }}
                     </span>
+                    <span class="mx-3">|</span>
+                    <a href="{{ route('pages.history') }}"
+                        class="inline-block no-underline hover:text-black cursor-pointer">
+                        <i class="fa-solid fa-list-ul"></i>
+                        ประวัติการยืม
+                    </a>
                     <span class="mx-3">|</span>
                     <form method="GET" action="{{ route('auth.logout') }}">
                         @csrf
@@ -83,7 +87,7 @@
 
         @yield('content')
 
-        <footer class="container mx-auto bg-white py-8 border-t border-gray-400">
+        {{-- <footer class="container mx-auto bg-white py-8 border-t border-gray-400">
             <div class="container text-center px-3 py-8 ">
                 <h3 class="font-bold text-gray-900">This is Footer</h3>
                 <p class="py-4">
@@ -91,7 +95,7 @@
                     commodo nec id erat. Suspendisse consectetur dapibus velit ut lacinia.
                 </p>
             </div>
-        </footer>
+        </footer> --}}
     </div>
 
 

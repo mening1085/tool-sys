@@ -66,7 +66,7 @@
                                         <div class="text-gray-900 text-center mr-2">
                                             <input type="number"
                                                 class="w-16 h-8 text-center border rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-gray-200"
-                                                value="1" min="1" name="qty">
+                                                value="1" min="1" max="{{ $item->qty }}" name="qty">
                                         </div>
                                         <div>
                                             <input type="hidden" value="{{ $item->id }}" name="id">
@@ -124,7 +124,6 @@
                                         </td>
                                         <td class="border">
                                             <div class="flex justify-center items-center">
-                                                {{-- <span id="{{ 'qtyTxt' . $id }}">{{ $item['qty'] }}</span> --}}
                                                 <input id="{{ 'qtyInput' . $id }}"
                                                     class="border qty rounded w-14 text-center update-cart" type="number"
                                                     value="{{ $item['qty'] }}" name="qty" />
@@ -133,15 +132,6 @@
                                         </td>
                                         <td class="border">
                                             <div class="flex justify-around items-center">
-                                                {{-- <button id="{{ 'btnEdit' . $id }}"
-                                                    class="btn btn-danger btn-sm edit-from-cart">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </button>
-                                                <button type="button" id="{{ 'btnUpdate' . $id }}"
-                                                    class="btn hidden btn-danger btn-sm update-cart">
-                                                    <i class="fa-solid fa-floppy-disk"></i>
-                                                </button> --}}
-
                                                 <button class="btn btn-danger btn-sm remove-from-cart">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>

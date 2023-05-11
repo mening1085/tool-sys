@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tools;
 use App\Models\UserTool;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -82,6 +83,77 @@ class CartController extends Controller
                 session()->put('cart', $cart);
             }
             session()->flash('success', 'Product removed successfully');
+        }
+    }
+
+    public function returnTool(UserTool $userTool)
+    {
+        DB::beginTransaction();
+
+        try {
+            // update tool qty
+            $tool = Tools::find($userTool->tool_id);
+            $tool->qty += $userTool->qty;
+            $tool->save();
+
+            // delete user tool
+            $userTool->delete();
+
+            DB::commit();
+            session()->flash('return-success', 'คืนอุปกรณ์เรียบร้อยแล้ว');
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'คืนอุปกรณ์เรียบร้อยแล้ว'
+                ]
+            );
+        } catch (\Exception $e) {
+            DB::rollback();
+            session()->flash('return-error', 'ไม่สามารถคืนอุปกรณ์ได้');
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'ไม่สามารถคืนอุปกรณ์ได้'
+                ]
+            );
+        }
+    }
+
+    public function returnToolAll()
+    {
+        DB::beginTransaction();
+
+        try {
+            $user = auth()->user();
+            $userTools = UserTool::where('user_id', $user->id)->get();
+
+            foreach ($userTools as $userTool) {
+                // update tool qty
+                $tool = Tools::find($userTool->tool_id);
+                $tool->qty += $userTool->qty;
+                $tool->save();
+
+                // delete user tool
+                $userTool->delete();
+            }
+
+            DB::commit();
+            session()->flash('return-success', 'คืนอุปกรณ์เรียบร้อยแล้ว');
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'คืนอุปกรณ์เรียบร้อยแล้ว'
+                ]
+            );
+        } catch (\Exception $e) {
+            DB::rollback();
+            session()->flash('return-error', 'ไม่สามารถคืนอุปกรณ์ได้');
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'ไม่สามารถคืนอุปกรณ์ได้'
+                ]
+            );
         }
     }
 }
