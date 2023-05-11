@@ -3,31 +3,102 @@
 @section('content')
     <section class="container relative bg-white py-8">
 
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:px-0 lg:px-4 md:px-5 px-4">
 
             {{-- List --}}
-            {{-- {{ $total == 0 ? '' : $total }} --}}
             <section class="list_items col-span-2">
 
-                {{-- Filter --}}
-                <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+                <div class="block lg:hidden">
                     <div class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
                         รายการอุปกรณ์
                     </div>
+                    <form action="{{ route('save.cart') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <table class="table-auto border w-full my-5">
+                            <thead>
+                                <tr>
+                                    <th width="50%" class="text-left border p-2">รายการ</th>
+                                    <th width="25%" class="border p-2">จำนวน</th>
+                                    <th width="25%" class="border p-2">ตัวเลือก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                    <form action="/" method="post">
-                        <div class="flex items-center gap-3">
+                                @php $total = 0 @endphp
+                                @if (session('cart'))
+                                    @foreach (session('cart') as $id => $item)
+                                        @php $total += $item['qty'] @endphp
+                                        <tr data-id="{{ $id }}">
+                                            <td class="border p-2">
+                                                <div class="flex items-center">
+                                                    <img src="{{ url('/images/' . $item['image']) }}" width="50"
+                                                        height="50" class="object-cover rounded-xl" />
+                                                    <div class="line-clamp-1 pl-2 hidden lg:hidden xl:flex">
+                                                        {{ $item['title'] }}
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td class="border">
+                                                <div class="flex justify-center items-center">
+                                                    <input id="{{ 'qtyInput' . $id }}"
+                                                        class="border qty rounded w-14 text-center update-cart"
+                                                        type="number" value="{{ $item['qty'] }}" name="qty" />
+
+                                                </div>
+                                            </td>
+                                            <td class="border">
+                                                <div class="flex justify-around items-center">
+                                                    <button class="btn btn-danger btn-sm remove-from-cart">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="3" class="text-center border p-5">
+                                            <h1>ไม่พบรายการ</h1>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                            </tbody>
+                        </table>
+                        <button
+                            class="mt-4 rounded w-full h-14 flex justify-center bg-gray-400 hover:bg-gray-600 text-white items-center">
+                            <span>ยืนยัน</span>
+                        </button>
+                    </form>
+                    <hr class="my-4">
+                </div>
+
+
+                {{-- Filter --}}
+                <div
+                    class="w-full container flex flex-wrap items-center justify-end lg:justify-between mt-0 px-0 py-3 sm:px-6">
+                    <div
+                        class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl hidden lg:block">
+                        รายการอุปกรณ์
+                    </div>
+
+                    <form action="{{ url('/') }}" method="get">
+                        <div class="w-full flex items-center gap-3 my-3 sm:my-0">
                             <div class="w-full">
                                 <input
                                     class="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="search" value="{{ old('search') }}" type="text" name="search"
+                                    id="search" value="{{ request()->get('search') }}" type="text" name="search"
                                     placeholder="ค้นหา">
                             </div>
                             <div class="w-full">
                                 <select
                                     class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="grid-state" name="category">
-                                    <option value="">เลือกประเภท</option>
+                                    <option value="" @if (request()->get('category') == '') selected @endif>เลือกประเภท
+                                    </option>
+
                                     <option value="">เลือกประเภท1</option>
                                     <option value="">เลือกประเภท2</option>
                                     <option value="">เลือกประเภท3</option>
@@ -43,7 +114,7 @@
                 </div>
 
                 {{-- Items --}}
-                <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                     @foreach ($data as $key => $item)
                         <div class="border rounded-2xl overflow-hidden">
                             <img class="hover:grow hover:shadow-lg w-full h-60  object-cover"
@@ -65,7 +136,7 @@
                                     <div class="flex items-center">
                                         <div class="text-gray-900 text-center mr-2">
                                             <input type="number"
-                                                class="w-16 h-8 text-center border rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                                                class="w-14 h-8 text-center border rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-gray-200"
                                                 value="1" min="1" max="{{ $item->qty }}" name="qty">
                                         </div>
                                         <div>
@@ -94,15 +165,15 @@
             </section>
 
             {{-- Cart --}}
-            <div class="cart border-l-2 px-6">
+            <div class="col-span-1 border-l-2 px-6 hidden md:hidden lg:block">
                 <form action="{{ route('save.cart', $item->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <table class="table-auto border w-full">
                         <thead>
                             <tr>
-                                <th width="60%" class="text-left border p-2">รายการ</th>
-                                <th width="20%" class="border p-2">จำนวน</th>
-                                <th width="20%" class="border p-2">ตัวเลือก</th>
+                                <th width="50%" class="text-left border p-2">รายการ</th>
+                                <th width="25%" class="border p-2">จำนวน</th>
+                                <th width="25%" class="border p-2">ตัวเลือก</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,7 +187,7 @@
                                             <div class="flex items-center">
                                                 <img src="{{ url('/images/' . $item['image']) }}" width="50"
                                                     height="50" class="object-cover rounded-xl" />
-                                                <div class="line-clamp-1 pl-2">
+                                                <div class="line-clamp-1 pl-2 hidden lg:hidden xl:flex">
                                                     {{ $item['title'] }}
                                                 </div>
                                             </div>

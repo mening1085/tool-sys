@@ -31,6 +31,14 @@
         .hover\:grow:hover {
             transform: scale(1.02);
         }
+
+        .card-menu-mobile {
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.64);
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.64);
+            -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.64);
+            position: relative;
+            z-index: 9999;
+        }
     </style>
     @vite('resources/js/app.js')
 
@@ -38,8 +46,46 @@
 
 
 <body class="bg-white text-gray-600 leading-normal text-base tracking-normal">
+
+    {{-- Mobile --}}
+    <header x-data="{ isOpen: false }" class="w-full md:hidden rounded-b-lg shodow-xl card-menu-mobile">
+        <div class="flex items-center justify-between bg-gray-200 py-5 px-6 ">
+            <a href="/" class="text-gray-800 text-lg font-semibold hover:text-gray-300 flex items-center">
+                <i class="fas fa-toolbox text-gray-800 pr-3 text-4xl"></i> ยืมคืนอุปกรณ์</a>
+            <div class="flex items-center">
+                <div class="pr-4">
+                    สวัสดีคุณ : {{ Auth::user()->name }}
+                </div>
+                <button @click="isOpen = !isOpen" class="text-gray-800 text-3xl focus:outline-none">
+                    <i x-show="!isOpen" class="fas fa-bars"></i>
+                    <i x-show="isOpen" class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile  Dropdown Nav -->
+        <nav :class="isOpen ? 'flex' : 'hidden'"
+            class="flex flex-col py-5 px-6 bg-white shadow-3xl realtive z-10 border-b-2 ">
+            <a href="{{ route('pages.history') }}"
+                class="py-4 pl-6 nav-item inline-block no-underline hover:text-black cursor-pointer">
+                <i class="fa-solid fa-list-ul mr-3"></i>
+                ประวัติการยืม
+            </a>
+
+            <hr>
+
+            <button
+                class="w-full bg-white cta-btn font-semibold mt-10 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                <a href="/logout" class=" w-full logout-btn text-white flex items-center justify-center py-4">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    ออกจากระบบ
+                </a>
+            </button>
+        </nav>
+    </header>
+
     <!--Nav-->
-    <nav id="header" class="w-full z-30 top-0 py-1 bg-gray-200">
+    <nav id="header" class="w-full z-30 top-0 py-1 bg-gray-200 hidden md:flex">
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
             <div class="order-1 md:order-2">
                 <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "

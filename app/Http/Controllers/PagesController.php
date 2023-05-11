@@ -10,8 +10,8 @@ class PagesController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Tools::when($request->keyword, function ($q) use ($request) {
-            $q->where('title', 'LIKE', '%' . $request->keyword . '%');
+        $data = Tools::when($request->search, function ($q) use ($request) {
+            $q->where('title', 'LIKE', '%' . $request->search . '%');
         })->paginate(8);
         return view('pages.frontend.index', compact('data'));
     }
