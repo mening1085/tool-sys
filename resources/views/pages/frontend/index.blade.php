@@ -278,7 +278,9 @@
                 text: "{{ Session::get('save-success') }}",
                 icon: "success",
                 button: "OK",
-            });
+            }).then((result) => {
+                window.location.href = "{{ route('pages.history') }}";
+            })
         @endif
 
         @if (Session::has('save-error'))

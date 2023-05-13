@@ -52,13 +52,7 @@
         <div class="text-2xl font-bold mb-3">แจ้งการยืมอุปกรณ์</div>
 
         <p class="text-lg mb-3">
-            รายการคที่คุณยืม
-            <span class="font-bold">
-                {{ $status == 1 ? 'ได้อนุมัติ' : 'ไม่ได้อนุมัติ' }} </span>
-            @if ($status == 2)
-                เนื่องจาก {{ $reason }}
-            @endif
-            </span>
+            คุณ {{ $user->name }} ได้ทำรายการขอยืมอุปกรณ์ ดังนี้
         </p>
 
         <table class="table-auto border w-full">
@@ -102,7 +96,7 @@
         </table>
 
 
-        <a href="{{ url('/') }}" target="_blank">
+        <a href="{{ url('/admin/user-tools') }}" target="_blank">
             <button class="mt-4 rounded-lg border px-4 py-2">
                 เข้าสู่เว็บไซต์
             </button>

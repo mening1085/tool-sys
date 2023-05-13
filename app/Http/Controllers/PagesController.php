@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orders;
 use App\Models\Tools;
 use App\Models\UserTool;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class PagesController extends Controller
 
     public function history()
     {
-        $data = UserTool::where('user_id', auth()->user()->id)->get();
+        $data = Orders::where('user_id', auth()->user()->id)->get();
         return view('pages.frontend.history', compact('data'));
     }
 

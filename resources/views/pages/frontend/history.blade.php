@@ -5,64 +5,37 @@
         <div class="history px-6">
             <div class="flex justify-between mb-4">
                 <h1 class="text-2xl font-bold mb-2">รายการยืม</h1>
-                <button class="text-sm border rounded-xl hover:border-gray-500 hover:bg-gray-200 px-3 py-1 return-all">
+                <button class="text-sm border rounded-xl border-red-500 text-red-500 hover:bg-red-100 px-3 py-1 return-all">
                     <i class="fa-solid fa-rotate-left"></i> คืนทั้งหมด
                 </button>
             </div>
             <table class="table-auto border w-full">
                 <thead>
                     <tr>
-                        <th width="10%" class="border p-4">ตัวเลือก</th>
-                        <th width="50%" class="text-left border p-4">รายการ</th>
-                        <th width="10%" class="border p-4">จำนวน</th>
-                        <th width="10%" class="border p-4">วันที่สร้าง</th>
-                        <th width="10%" class="border p-4">สถานะ</th>
-                        <th width="10%" class="border p-4">หมายเหตุ</th>
+                        <th width="10%" class="border p-3">ลำดับ</th>
+                        <th width="25%" class="border p-3">วันที่สร้าง</th>
+                        <th width="20%" class="border p-3">สถานะ</th>
+                        <th width="25%" class="border p-3">หมายเหตุ</th>
+                        <th width="20%" class="border p-3">ตัวเลือก</th>
                     </tr>
                 </thead>
                 <tbody>
-
-                    @php $total = 0 @endphp
                     @if (count($data) > 0)
                         @foreach ($data as $id => $item)
-                            @php $total += $item['qty'] @endphp
                             <tr data-id="{{ $item->id }}">
-                                <td class="border">
-                                    <div class="flex justify-around items-center">
-                                        {{-- <form action="{{ route('cart.return.tool', $item->id) }}" method="post">
-                                            @csrf --}}
-                                        <button
-                                            class="hover:border-gray-500 hover:bg-gray-200  border rounded-xl flex justify-center items-center w-10 h-10 return-tool"
-                                            id="return-tool" type="submit">
-                                            <i class="fa-solid fa-rotate-left"></i>
-                                        </button>
-                                        {{-- </form> --}}
-                                    </div>
-                                </td>
-
-                                <td class="border p-4">
-                                    <div class="flex items-center">
-                                        <img src="{{ url('/images/' . $item['tool']['image']) }}" width="100"
-                                            height="100" class="object-cover rounded-xl" />
-                                        <div class="line-clamp-1 pl-4">
-                                            {{ $item['tool']['title'] }}
-                                        </div>
-                                    </div>
-
-                                </td>
-                                <td class="border">
+                                <td class="border p-3">
                                     <div class="flex justify-center items-center">
-                                        {{ $item['qty'] }}
+                                        {{ $id + 1 }}
                                     </div>
                                 </td>
-                                <td class="border">
+
+                                <td class="border p-3">
                                     <div class="text-center">
                                         {{ $item['created_at'] }}
                                     </div>
                                 </td>
 
-
-                                <td class="border">
+                                <td class="border p-3">
                                     <div class="flex justify-center items-center">
                                         @if ($item['status'] == 1)
                                             <i class="fa-solid fa-check text-green-500 mr-2"></i>
@@ -76,12 +49,48 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="border">
+
+                                <td class="border p-3">
                                     <div class="flex justify-center items-center">
                                         {{ $item['message'] }}
                                     </div>
                                 </td>
+
+                                <td class="border">
+                                    <div class="flex justify-around items-center">
+                                        <button
+                                            class="border-red-500 text-red-500 hover:bg-red-100 border rounded-xl flex justify-center items-center w-16 h-10 return-tool"
+                                            id="return-tool" type="submit">
+                                            <i class="fa-solid fa-rotate-left mr-2"></i> คืน
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
+
+                            <tr>
+                                <th width="10%" class="p-3"></th>
+                                <th width="25%" class="px-4 py-3 border text-start" colspan="2">รายการ</th>
+                                <th width="20%" class="px-4 py-3 border">รูป</th>
+                                <th width="25%" class="px-4 py-3 border">จำนวน</th>
+                            </tr>
+                            @foreach ($item->user_tools as $index => $user_tools)
+                                <tr>
+                                    <td class="px-4 py-1 border-l"></td>
+                                    <td class="px-4 py-1 border-l" colspan="2">
+                                        <div class="line-clamp-2">
+                                            <i class="fas fa-caret-right text-red-600"></i>
+                                            {{ $user_tools->tool->title }}
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-1 border-l flex justify-center items-center">
+                                        <img class="w-14 h-14 object-cover rounded-xl"
+                                            src="{{ url('/images/' . $user_tools->tool->image) }}" alt="">
+                                    </td>
+                                    <td class="px-4 py-1 border-l text-center">
+                                        <span class="font-bold">{{ $user_tools->qty }}</span>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     @else
                         <tr>
@@ -90,7 +99,6 @@
                             </td>
                         </tr>
                     @endif
-
                 </tbody>
             </table>
         </div>
@@ -178,7 +186,7 @@
                             console.log(response);
                             swal({
                                 title: "Failed!",
-                                text: response.message,
+                                text: response.responseJSON.message,
                                 icon: "error",
                                 button: "OK",
                             });

@@ -34,7 +34,7 @@
 
         <hr>
 
-        <a href="/admin/dashboard"
+        {{-- <a href="/admin/dashboard"
             class="flex items-center py-4 pl-6 nav-item @if (request()->is('admin/dashboard/*') || request()->is('admin/dashboard')) active-nav-link font-semibold @endif ">
             <i class="fas fa-tachometer-alt mr-3"></i>
             Dashboard
@@ -58,7 +58,7 @@
             class="flex items-center hover:opacity-100 py-4 pl-6 nav-item @if (Request::path() == 'calendar') active-nav-link font-semibold @endif">
             <i class="fas fa-calendar mr-3"></i>
             Calendar
-        </a>
+        </a> --}}
     </nav>
     <a href="/logout" class="absolute w-full logout-btn bottom-0  text-white flex items-center justify-center py-4">
         <i class="fas fa-sign-out-alt mr-3"></i>

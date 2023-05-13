@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
@@ -28,7 +29,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 Route::group(['middleware' => 'auth'], function () {
     // user
     Route::get('history', [PagesController::class, 'history'])->name('pages.history');
-    Route::post('return-tool/{userTool}', [CartController::class, 'returnTool'])->name('cart.return.tool');
+    Route::post('return-tool/{order}', [CartController::class, 'returnTool'])->name('cart.return.tool');
     Route::post('return-all', [CartController::class, 'returnToolAll'])->name('cart.return.all');
     Route::post('save-cart', [CartController::class, 'save'])->name('save.cart');
 
@@ -56,6 +57,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::put('/tools/{tools}', [ToolController::class, 'update'])->name('tools.update');
             Route::delete('/tools/{tools}', [ToolController::class, 'destroy'])->name('tools.destroy');
 
+            // orders
+            Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
             // user tools
             Route::get('/user-tools', [UserToolsController::class, 'index'])->name('user-tools.index');
             Route::get('/user-tools/create',  [UserToolsController::class, 'create'])->name('user-tools.create');
@@ -64,7 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/user-tools/{userTool}/edit',  [UserToolsController::class, 'edit'])->name('user-tools.edit');
             Route::put('/user-tools/{userTool}',  [UserToolsController::class, 'update'])->name('user-tools.update');
             Route::delete('/user-tools/{userTool}',  [UserToolsController::class, 'destroy'])->name('user-tools.destroy');
-            Route::post('/tools-status/{userTool}', [UserToolsController::class, 'updateStatus'])->name('tools.update.status');
+            Route::post('/tools-status', [UserToolsController::class, 'updateStatus'])->name('tools.update.status');
 
             // dashboard
             Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('pages.dashboard');

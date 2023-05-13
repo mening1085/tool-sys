@@ -6,28 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserTool extends Model
+class Orders extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $table = 'user_tool';
+    protected $table = 'orders';
     protected $primary = 'id';
-    protected $with = ['tool', 'user'];
+    protected $with = ['user', 'user_tools'];
     protected $fillable = [
-        'order_id',
         'user_id',
         'user_name',
-        'tool_id',
-        'qty',
+        'status',
+        'note',
     ];
-
-    public function tool()
-    {
-        return $this->belongsTo(Tools::class, 'tool_id');
-    }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    public function user_tools()
+    {
+        return $this->hasMany(UserTool::class, 'order_id', 'id');
     }
 }

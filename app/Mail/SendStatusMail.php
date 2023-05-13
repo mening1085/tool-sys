@@ -15,6 +15,9 @@ class SendStatusMail extends Mailable
     public $user;
     public $tool;
     public $subject;
+    public $status;
+    public $data;
+    public $reason;
 
     /**
      * Create a new message instance.
@@ -23,9 +26,10 @@ class SendStatusMail extends Mailable
      */
     public function __construct($mailData)
     {
-        $this->user = $mailData['user'];
         $this->tool = $mailData['tool'];
-        $this->subject = $mailData['subject'];
+        $this->status = $mailData['status'];
+        $this->data = $mailData['data'];
+        $this->reason = $mailData['reason'];
     }
 
     /**

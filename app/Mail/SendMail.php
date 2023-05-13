@@ -46,7 +46,7 @@ class SendMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'sendStatusMail',
+            view: 'sendMail',
         );
     }
 

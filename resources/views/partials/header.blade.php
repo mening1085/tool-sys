@@ -31,14 +31,14 @@
 
      <!-- Dropdown Nav -->
      <nav :class="isOpen ? 'flex' : 'hidden'" class="flex flex-col py-5 px-6 bg-white">
-         <a href="/admin/tool-management"
+         <a href="/admin/tools"
              class="flex items-center py-4 pl-6 nav-item @if (request()->is('tool-management/*') || request()->is('tool-management')) active-nav-link font-semibold @endif ">
              <i class="fas fa-tachometer-alt mr-3"></i>
              จัดการอุปกรณ์
          </a>
 
          <hr>
-         <a href="/admin/tools"
+         <a href="/admin/user-tools"
              class="flex items-center hover:opacity-100 py-4 pl-6 nav-item @if (request()->is('tools/*') || request()->is('tools')) active-nav-link font-semibold @endif">
              <i class="fas fa-table mr-3"></i>
              รายการยืมอุปกรณ์

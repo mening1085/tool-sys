@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendMail;
+use App\Models\Orders;
 use App\Models\Tools;
 use App\Models\UserTool;
 use Illuminate\Http\Request;
@@ -28,11 +29,23 @@ class CartController extends Controller
                     ->with('save-error', 'ไม่มีอุปกรณ์ที่คุณต้องการยืม');
             }
 
+            // create order
+            $orderId = Orders::insertGetId([
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'status' => 0,
+                'note' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             foreach ($cart as $item) {
                 UserTool::create([
+                    'order_id' => $orderId,
                     'user_id' => $user->id,
+                    'user_name' => $user->name,
                     'tool_id' => $item['id'],
-                    'qty' => $item['qty']
+                    'qty' => $item['qty'],
                 ]);
 
                 // update tool qty
@@ -43,7 +56,7 @@ class CartController extends Controller
 
 
             // send email
-            $userTools = UserTool::where('user_id', $user->id)->get();
+            $userTools = UserTool::where('order_id', $orderId)->get();
             $mailData = [
                 'user' => $user,
                 'data' => $userTools
@@ -106,18 +119,26 @@ class CartController extends Controller
         }
     }
 
-    public function returnTool(UserTool $userTool)
+    public function returnTool(Orders $order)
     {
         DB::beginTransaction();
-
         try {
-            // update tool qty
-            $tool = Tools::find($userTool->tool_id);
-            $tool->qty += $userTool->qty;
-            $tool->save();
+            // get order in user tool
+            $userTools = UserTool::where('order_id', $order->id)->get();
 
-            // delete user tool
-            $userTool->delete();
+            // update qty tool
+            foreach ($userTools as $userTool) {
+                // update tool qty
+                $tool = Tools::find($userTool->tool_id);
+                $tool->qty += $userTool->qty;
+                $tool->save();
+
+                // delete user tool
+                $userTool->delete();
+            }
+
+            // remove order
+            $order->delete();
 
             DB::commit();
             session()->flash('return-success', 'คืนอุปกรณ์เรียบร้อยแล้ว');
@@ -145,6 +166,19 @@ class CartController extends Controller
 
         try {
             $user = auth()->user();
+
+            $order = Orders::where('user_id', $user->id)->first();
+
+            if (!$order) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'ไม่มีอุปกรณ์ที่คุณต้องการคืน'
+                    ],
+                    404
+                );
+            }
+
             $userTools = UserTool::where('user_id', $user->id)->get();
 
             foreach ($userTools as $userTool) {
