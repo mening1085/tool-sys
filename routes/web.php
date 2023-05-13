@@ -9,6 +9,7 @@ use App\Http\Controllers\UserToolsController;
 use Illuminate\Support\Facades\Route;
 
 // frontend
+Route::get('/email', [PagesController::class, 'email'])->name('pages.email');
 Route::get('/', [PagesController::class, 'index'])->name('pages.index');
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
@@ -63,6 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/user-tools/{userTool}/edit',  [UserToolsController::class, 'edit'])->name('user-tools.edit');
             Route::put('/user-tools/{userTool}',  [UserToolsController::class, 'update'])->name('user-tools.update');
             Route::delete('/user-tools/{userTool}',  [UserToolsController::class, 'destroy'])->name('user-tools.destroy');
+            Route::post('/tools-status/{userTool}', [UserToolsController::class, 'updateStatus'])->name('tools.update.status');
 
             // dashboard
             Route::get('/dashboard', [PagesController::class, 'dashboard'])->name('pages.dashboard');

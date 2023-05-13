@@ -72,7 +72,7 @@
                 <a href="{{ route('pages.history') }}"
                     class="py-4 pl-6 nav-item inline-block no-underline hover:text-black cursor-pointer">
                     <i class="fa-solid fa-list-ul mr-3"></i>
-                    ประวัติการยืม
+                    รายการยืม
                 </a>
 
                 <hr>
@@ -114,7 +114,7 @@
                     <a href="{{ route('pages.history') }}"
                         class="inline-block no-underline hover:text-black cursor-pointer">
                         <i class="fa-solid fa-list-ul"></i>
-                        ประวัติการยืม
+                        รายการยืม
                     </a>
                     <span class="mx-3">|</span>
                     <form method="GET" action="{{ route('auth.logout') }}">

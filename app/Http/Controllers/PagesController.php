@@ -16,6 +16,13 @@ class PagesController extends Controller
         return view('pages.frontend.index', compact('data'));
     }
 
+    public function email(Request $request)
+    {
+        $data = UserTool::where('user_id', 10)->get();
+
+        return view('sendStatusMail', compact('data'));
+    }
+
     public function history()
     {
         $data = UserTool::where('user_id', auth()->user()->id)->get();

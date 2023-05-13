@@ -15,7 +15,9 @@ class UserTool extends Model
     protected $fillable = [
         'user_id',
         'tool_id',
-        'qty'
+        'qty',
+        'status',
+        'message',
     ];
 
     public function tool()

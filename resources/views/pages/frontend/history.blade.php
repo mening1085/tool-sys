@@ -4,7 +4,7 @@
     <section class="container relative bg-white py-8">
         <div class="history px-6">
             <div class="flex justify-between mb-4">
-                <h1 class="text-2xl font-bold mb-2">ประวัติการยืม</h1>
+                <h1 class="text-2xl font-bold mb-2">รายการยืม</h1>
                 <button class="text-sm border rounded-xl hover:border-gray-500 hover:bg-gray-200 px-3 py-1 return-all">
                     <i class="fa-solid fa-rotate-left"></i> คืนทั้งหมด
                 </button>
@@ -12,9 +12,12 @@
             <table class="table-auto border w-full">
                 <thead>
                     <tr>
-                        <th width="60%" class="text-left border p-4">รายการ</th>
-                        <th width="20%" class="border p-4">จำนวน</th>
-                        <th width="20%" class="border p-4">ตัวเลือก</th>
+                        <th width="10%" class="border p-4">ตัวเลือก</th>
+                        <th width="50%" class="text-left border p-4">รายการ</th>
+                        <th width="10%" class="border p-4">จำนวน</th>
+                        <th width="10%" class="border p-4">วันที่สร้าง</th>
+                        <th width="10%" class="border p-4">สถานะ</th>
+                        <th width="10%" class="border p-4">หมายเหตุ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,6 +27,19 @@
                         @foreach ($data as $id => $item)
                             @php $total += $item['qty'] @endphp
                             <tr data-id="{{ $item->id }}">
+                                <td class="border">
+                                    <div class="flex justify-around items-center">
+                                        {{-- <form action="{{ route('cart.return.tool', $item->id) }}" method="post">
+                                            @csrf --}}
+                                        <button
+                                            class="hover:border-gray-500 hover:bg-gray-200  border rounded-xl flex justify-center items-center w-10 h-10 return-tool"
+                                            id="return-tool" type="submit">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </button>
+                                        {{-- </form> --}}
+                                    </div>
+                                </td>
+
                                 <td class="border p-4">
                                     <div class="flex items-center">
                                         <img src="{{ url('/images/' . $item['tool']['image']) }}" width="100"
@@ -40,15 +56,29 @@
                                     </div>
                                 </td>
                                 <td class="border">
-                                    <div class="flex justify-around items-center">
-                                        {{-- <form action="{{ route('cart.return.tool', $item->id) }}" method="post">
-                                            @csrf --}}
-                                        <button
-                                            class="hover:border-gray-500 hover:bg-gray-200  border rounded-xl flex justify-center items-center w-10 h-10 return-tool"
-                                            id="return-tool" type="submit">
-                                            <i class="fa-solid fa-rotate-left"></i>
-                                        </button>
-                                        {{-- </form> --}}
+                                    <div class="text-center">
+                                        {{ $item['created_at'] }}
+                                    </div>
+                                </td>
+
+
+                                <td class="border">
+                                    <div class="flex justify-center items-center">
+                                        @if ($item['status'] == 1)
+                                            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+                                            <span>อนุมัติ</span>
+                                        @elseif($item['status'] == 2)
+                                            <i class="fa-solid fa-times text-red-500 mr-2"></i>
+                                            <span>ไม่อนุมัติ</span>
+                                        @else
+                                            <i class="fa-solid fa-clock text-yellow-500 mr-2"></i>
+                                            <span>รออนุมัติ</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="border">
+                                    <div class="flex justify-center items-center">
+                                        {{ $item['message'] }}
                                     </div>
                                 </td>
                             </tr>

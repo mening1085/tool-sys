@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendMail;
 use App\Models\Tools;
 use App\Models\UserTool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -16,32 +18,50 @@ class CartController extends Controller
 
     public function save(Request $request)
     {
-        $cart = session()->get('cart', []);
-        $user = auth()->user();
+        DB::beginTransaction();
+        try {
+            $cart = session()->get('cart', []);
+            $user = auth()->user();
 
-        if (!$cart) {
+            if (!$cart) {
+                return redirect()->route('pages.index')
+                    ->with('save-error', 'ไม่มีอุปกรณ์ที่คุณต้องการยืม');
+            }
+
+            foreach ($cart as $item) {
+                UserTool::create([
+                    'user_id' => $user->id,
+                    'tool_id' => $item['id'],
+                    'qty' => $item['qty']
+                ]);
+
+                // update tool qty
+                $tool = Tools::find($item['id']);
+                $tool->qty -= $item['qty'];
+                $tool->save();
+            }
+
+
+            // send email
+            $userTools = UserTool::where('user_id', $user->id)->get();
+            $mailData = [
+                'user' => $user,
+                'data' => $userTools
+            ];
+            Mail::to($user->email)->send(new SendMail($mailData));
+
+            // clear cart
+            session()->forget('cart');
+
+            DB::commit();
+
             return redirect()->route('pages.index')
-                ->with('save-error', 'ไม่มีอุปกรณ์ที่คุณต้องการยืม');
+                ->with('save-success', 'เราได้รับคำสั่งการยืมอุปกรณ์ของคุณแล้ว ทางเราจะติดต่อกลับยัง email ของคุณโดยเร็วที่สุด');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('pages.index')
+                ->with('save-error', 'ไม่สามารถยืมอุปกรณ์ได้');
         }
-
-        foreach ($cart as $item) {
-            UserTool::create([
-                'user_id' => $user->id,
-                'tool_id' => $item['id'],
-                'qty' => $item['qty']
-            ]);
-
-            // update tool qty
-            $tool = Tools::find($item['id']);
-            $tool->qty -= $item['qty'];
-            $tool->save();
-        }
-
-        // clear cart
-        session()->forget('cart');
-
-        return redirect()->route('pages.index')
-            ->with('save-success', 'เราได้รับคำสั่งการยืมอุปกรณ์ของคุณแล้ว ทางเราจะติดต่อกลับยัง email ของคุณโดยเร็วที่สุด');
     }
 
     public function addToCart(Request $request)
