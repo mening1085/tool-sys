@@ -55,8 +55,8 @@
                 </label>
                 <div>
                     <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->status == '1' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                        {{ $user->status == '1' ? 'Active' : 'Inactive' }}
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->status == '1' ? 'bg-green-100 text-green-800' : ($user->status == '2' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800') }}">
+                        {{ $user->status == 1 ? 'Active' : ($user->status == 2 ? 'Pending' : 'Inactive') }}
                     </span>
                 </div>
             </div>

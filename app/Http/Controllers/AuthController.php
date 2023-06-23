@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SenndMailNewUser;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -56,6 +59,10 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
+    public function createRegister()
+    {
+        return view('register');
+    }
 
     public function logout()
     {
@@ -63,39 +70,42 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function thirdPartyLogin(Request $request)
+    public function store(Request $request)
     {
-        // ส่งคำขอไปยัง third-party API สำหรับการเข้าสู่ระบบ
+        $validatedData = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'password' => 'required|confirmed|min:4',
+            'email' => 'required|email|unique:users,email',
+        ], [
+            'first_name.required' => 'Name field is required.',
+            'last_name.required' => 'Name field is required.',
+            'password.required' => 'Password field is required.',
+            'password.confirmed' => 'Password and confirm password must be same.',
+            'email.required' => 'Email field is required.',
+            'email.email' => 'Email field must be email address.',
+        ]);
+
+        DB::beginTransaction();
+
         try {
-            $client = new Client();
-            $response = $client->get("http://127.0.0.1:8001/api/login?email=" . $request['email'] . "&password=" . $request['password']);
+            $validatedData['password'] = bcrypt($validatedData['password']);
+            $validatedData['role'] = 2;
+            $validatedData['status'] = 2;
 
+            User::create($validatedData);
 
-            // ตรวจสอบคำตอบจาก third-party API
-            $data = json_decode($response->getBody(), true);
+            // send email to admin
+            Mail::to($validatedData['email'])->send(new SenndMailNewUser($validatedData));
 
-            if ($response->getStatusCode() == 201 && $data) {
-                // ทำการเข้าสู่ระบบผ่าน Laravel
-                auth()->loginUsingId($data['user']['id']);
+            DB::commit();
 
-                // ถ้าไม่มีผู้ใช้ในระบบ ให้สร้างผู้ใช้ใหม่
-                if (!User::where('email', $data['user']['email'])->first()) {
-                    $user = new User();
-                    $user->name = $data['user']['name'];
-                    $user->email = $data['user']['email'];
-                    $user->password = $data['user']['password'];
-                    $user->save();
-                }
-                dd($data['user'], auth()->user());
-                return redirect()->route('tools.index');
-            } else {
-                // dd(111);
-                return redirect('/login')->with('error', 'ไม่สามารถเข้าสู่ระบบได้'); // หรือทำการตอบกลับตามที่คุณต้องการ
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
-
-            return redirect('/login')->with('error', 'ไม่สามารถเข้าสู่ระบบได้'); // หรือทำการตอบกลับตามที่คุณต้องการ
+            return redirect()->route('login')
+                ->with('success', 'สมัครสมาชิกเรียบร้อยแล้ว ผู้ดูแลระบบจะทำการตรวจสอบข้อมูลและจะแจ้งผลการอนุมัติให้ทราบทางอีเมล์');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()
+                ->with('error', 'Register failed.' . $e->getMessage());
         }
     }
 }

@@ -86,7 +86,7 @@
                     @endif
                 </div>
             </div>
-            <div class="flex flex-wrap  -mx-3 mb-6 px-3">
+            <div class="flex flex-wrap  -mx-3 px-3">
                 <div class="flex items-center mr-3">
                     <label class="block tracking-wide text-gray-700 text-x font-bold" for="grid-password">
                         สถานะ
@@ -109,6 +109,9 @@
                     </label>
                 </div>
             </div>
+            @if ($errors->has('status'))
+                <span class="text-red-500 text-xs">{{ $errors->first('status') }}</span>
+            @endif
         </form>
     </div>
 @endsection

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendMailApproved;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -44,16 +47,41 @@ class UserController extends Controller
     {
         $validatedData = $this->customValidate($request, $user);
 
-        if ($request->filled('password')) {
-            $validatedData['password'] = bcrypt($validatedData['password']);
-        } else {
-            unset($validatedData['password']);
+        DB::beginTransaction();
+
+        try {
+            if ($request->filled('password')) {
+                $validatedData['password'] = bcrypt($validatedData['password']);
+            } else {
+                unset($validatedData['password']);
+            }
+
+            // check status is peding or not
+            if ($user->status == 2) {
+                $isPending = true;
+            } else {
+                $isPending = false;
+            }
+
+            $user->update($validatedData);
+
+            // if status is pending then send email to user
+            if ($isPending) {
+                // send email to user
+                Mail::to($user->email)->send(new sendMailApproved([
+                    'status' => $request->status,
+                ]));
+            }
+
+            DB::commit();
+
+            return redirect()->route('users.index')
+                ->with('success', 'User updated successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('users.edit', $user->id)
+                ->with('error', 'Updated user failed.' . $e->getMessage());
         }
-
-        $user->update($validatedData);
-
-        return redirect()->route('users.index')
-            ->with('success', 'User updated successfully');
     }
 
     public function customValidate($request, $user = null)
@@ -61,7 +89,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'password' => $user && $user->id ? '' : 'required',
+            'password' => $user && $user->id ? '' : 'required|min:4',
             'email' => $user && $user->id ? '' : 'required|email|unique:users,email,' . $user->id,
             'status' => 'required',
         ], [

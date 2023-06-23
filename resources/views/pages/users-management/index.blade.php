@@ -32,7 +32,7 @@
                                 Email
                             </th>
                             <th width="150px"
-                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
                                 Status
                             </th>
                             <th width="150px"
@@ -62,10 +62,14 @@
                                         {{ $item->email }}
                                     </p>
                                 </td>
-                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                     <p
-                                        class="@if ($item->status == 1) text-green-500 @else text-red-500 @endif whitespace-no-wrap">
-                                        {{ $item->status == 1 ? 'Active' : 'Inactive' }}
+                                        class="
+                                        @if ($item->status == 1) text-green-500 bg-green-100
+                                        @elseif($item->status == 2) text-blue-500 bg-blue-100
+                                        @else text-red-500 bg-red-100 @endif 
+                                        whitespace-no-wrap rounded-full py-1">
+                                        {{ $item->status == 1 ? 'Active' : ($item->status == 2 ? 'Pending' : 'Inactive') }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">

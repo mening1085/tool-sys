@@ -49,52 +49,17 @@
 
     <!--List-->
     <div class="container mx-auto h-screen p-6 mb-6">
-        <div class="text-2xl font-bold mb-3">แจ้งการยืมอุปกรณ์</div>
+        <div class="text-2xl font-bold mb-3">แจ้งผลการอนุมัติการสมัครสมาชิก</div>
 
-        <p class="text-lg mb-3">
-            คุณ {{ $user->first_name }} {{ $user->last_name }} ได้ทำรายการขอยืมอุปกรณ์ ดังนี้
-        </p>
-
-        <table class="table-auto border w-full">
-            <thead>
-                <tr>
-                    <th width="80%" class="text-left border p-4">รายการ</th>
-                    <th width="20%" class="border p-4">จำนวน</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @if (count($data) > 0)
-                    @foreach ($data as $id => $item)
-                        <tr data-id="{{ $item->id }}">
-                            <td class="border p-4">
-                                <div class="flex items-center">
-                                    <img src="{{ url('/images/' . $item['tool']['image']) }}" width="100"
-                                        height="100" class="object-cover rounded-xl" />
-                                    <div class="line-clamp-1 pl-4">
-                                        {{ $item['tool']['title'] }}
-                                    </div>
-                                </div>
-
-                            </td>
-                            <td class="border">
-                                <div class="flex justify-center items-center">
-                                    {{ $item['qty'] }}
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="3" class="text-center border p-5">
-                            <h1>ไม่พบรายการ</h1>
-                        </td>
-                    </tr>
-                @endif
-
-            </tbody>
-        </table>
-
+        @if ($status == '1')
+            <p class="text-lg mb-3">
+                การสมัครสมาชิกของท่านผ่านการอนุมัติ
+            </p>
+        @else
+            <p class="text-lg mb-3">
+                การสมัครสมาชิกของท่านไม่ได้รับการอนุมัติ
+            </p>
+        @endif
 
         <a href="{{ url('/admin/user-tools') }}" target="_blank">
             <button class="mt-4 rounded-lg border px-4 py-2">

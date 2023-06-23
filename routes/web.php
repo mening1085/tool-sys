@@ -25,10 +25,9 @@ Route::delete('remove-from-cart', [CartController::class, 'remove'])->name('remo
 // auth  
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/login', 'AuthController@index')->name('login');
-
     Route::post('/login', 'AuthController@login')->name('auth.login');
-
-    Route::post('third-party-login', 'AuthController@thirdPartyLogin');
+    Route::get('/register', 'AuthController@createRegister')->name('create.register');
+    Route::post('/register', 'AuthController@store')->name('save.register');
 });
 
 
