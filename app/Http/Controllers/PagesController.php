@@ -6,6 +6,7 @@ use App\Models\Orders;
 use App\Models\Tools;
 use App\Models\UserTool;
 use Illuminate\Http\Request;
+use Phattarachai\LineNotify\Facade\Line;
 
 class PagesController extends Controller
 {
@@ -22,6 +23,13 @@ class PagesController extends Controller
         $data = UserTool::where('user_id', 10)->get();
 
         return view('sendStatusMail', compact('data'));
+    }
+
+    public function testLine()
+    {
+        Line::send('Hello World');
+
+        dd('Line Notify Send Successfully.');
     }
 
     public function history()

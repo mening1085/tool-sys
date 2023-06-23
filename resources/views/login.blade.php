@@ -6,7 +6,7 @@
             <form class="mb-4" action="/login" method="POST">
                 @csrf
                 <div class="mb-4 md:w-full">
-                    <label for="email" class="block text-l mb-1">รหัสประจำตัว หรือ NUNET Account </label>
+                    <label for="email" class="block text-l mb-1">Email</label>
                     <input class="w-full border rounded p-2 outline-none focus:shadow-outline" type="text" name="email"
                         id="email" placeholder="รหัสประจำตัว หรือ NUNET Account">
                 </div>
@@ -20,4 +20,16 @@
             </form>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        @if (Session::has('error'))
+            swal({
+                title: "Failed!",
+                text: "{{ Session::get('error') }}",
+                icon: "error",
+                button: "OK",
+            });
+        @endif
+    </script>
 @endsection

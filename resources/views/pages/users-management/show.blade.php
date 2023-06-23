@@ -19,22 +19,56 @@
 
         <hr class="my-4">
 
-        <div class="flex flex-wrap mb-6 -mx-3">
+        <div class="flex flex-wrap mb-6">
             {{-- form detail --}}
-            <div class="w-full px-3 mb-6 md:mb-0">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    Name
+
+            <div class="w-full px-3 mb-4">
+                <label class="block tracking-wide text-gray-700 text-x font-bold mb-2" for="grid-first-name">
+                    ชื่อ
                 </label>
-                <input type="text" value="{{ $user->name }}" disabled
-                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">
+                <input
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-200"
+                    value="{{ $user->first_name }}" disabled>
             </div>
 
-            <div class="w-full px-3 mb-6 md:mb-0 mt-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <div class="w-full px-3 mb-4">
+                <label class="block tracking-wide text-gray-700 text-x font-bold mb-2" for="grid-first-name">
+                    นามสกุล
+                </label>
+                <input
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-200"
+                    value="{{ $user->last_name }}" disabled>
+            </div>
+
+            <div class="w-full px-3 mb-4">
+                <label class="block tracking-wide text-gray-700 text-x font-bold mb-2" for="grid-last-name">
                     Email
                 </label>
-                <input type="text" value="{{ $user->email }}" disabled
-                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">
+                <input
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-gray-500"
+                    value="{{ $user->email }}" disabled>
+            </div>
+
+            <div class="w-full px-3 mb-4">
+                <label class="block tracking-wide text-gray-700 text-x font-bold mb-2" for="grid-last-name">
+                    สถานะ
+                </label>
+                <div>
+                    <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->status == '1' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        {{ $user->status == '1' ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="w-full px-3 mb-4">
+                <label class="block tracking-wide text-gray-700 text-x font-bold mb-2" for="grid-last-name">
+                    วันที่สร้าง
+                </label>
+                <input
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-gray-500"
+                    value="{{ $user->created_at }}" disabled>
             </div>
 
         </div>

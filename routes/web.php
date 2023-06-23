@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\LineBotController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ToolController;
@@ -10,6 +11,10 @@ use App\Http\Controllers\UserToolsController;
 use Illuminate\Support\Facades\Route;
 
 // frontend
+Route::get('/test-line', [PagesController::class, 'testLine'])->name('pages.line');
+Route::post('/webhook', [LineBotController::class, 'handleWebhook']);
+
+
 Route::get('/email', [PagesController::class, 'email'])->name('pages.email');
 Route::get('/', [PagesController::class, 'index'])->name('pages.index');
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
@@ -22,6 +27,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/login', 'AuthController@index')->name('login');
 
     Route::post('/login', 'AuthController@login')->name('auth.login');
+
+    Route::post('third-party-login', 'AuthController@thirdPartyLogin');
 });
 
 

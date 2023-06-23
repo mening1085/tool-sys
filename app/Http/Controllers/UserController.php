@@ -20,19 +20,11 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'password' => 'required|min:4',
-            'email' => 'required|email|unique:users'
-        ], [
-            'name.required' => 'Name field is required.',
-            'password.required' => 'Password field is required.',
-            'email.required' => 'Email field is required.',
-            'email.email' => 'Email field must be email address.'
-        ]);
+        $validatedData = $this->customValidate($request);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
-        $user = User::create($validatedData);
+        $validatedData['role'] = 2;
+        User::create($validatedData);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');
@@ -45,23 +37,12 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        dd($user);
         return view('pages.users-management.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'password' => 'nullable|min:4',
-            'email' => 'required|email|unique:users,email,' . $user->id
-        ], [
-            'name.required' => 'Name field is required.',
-            'password.min' => 'Password field must be at least 4 characters.',
-            'email.required' => 'Email field is required.',
-            'email.email' => 'Email field must be email address.'
-        ]);
-
+        $validatedData = $this->customValidate($request, $user);
 
         if ($request->filled('password')) {
             $validatedData['password'] = bcrypt($validatedData['password']);
@@ -73,6 +54,26 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully');
+    }
+
+    public function customValidate($request, $user = null)
+    {
+        $validatedData = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'password' => $user && $user->id ? '' : 'required',
+            'email' => $user && $user->id ? '' : 'required|email|unique:users,email,' . $user->id,
+            'status' => 'required',
+        ], [
+            'first_name.required' => 'Name field is required.',
+            'last_name.required' => 'Name field is required.',
+            'password.required' => 'Password field is required.',
+            'email.required' => 'Email field is required.',
+            'email.email' => 'Email field must be email address.',
+            'status.required' => 'Status field is required.',
+        ]);
+
+        return $validatedData;
     }
 
     public function destroy(User $user)

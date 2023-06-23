@@ -3,7 +3,7 @@
 @section('content')
     <div class="mx-auto">
         <div class="flex items-center justify-between ">
-            <div class="text-xl text-gray-500  font-semibold leading-tight">Users</div>
+            <div class="text-xl text-gray-500  font-semibold leading-tight">Users Management</div>
             <a href="{{ route('users.create') }}"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
                 Create
@@ -33,6 +33,10 @@
                             </th>
                             <th width="150px"
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th width="150px"
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Created at
                             </th>
                             <th width="150px"
@@ -48,7 +52,7 @@
                                     <div class="flex items-center">
                                         <div class="ml-3">
                                             <p class="text-gray-900 whitespace-no-wrap">
-                                                {{ $item->name }}
+                                                {{ $item->first_name }} {{ $item->last_name }}
                                             </p>
                                         </div>
                                     </div>
@@ -56,6 +60,12 @@
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ $item->email }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p
+                                        class="@if ($item->status == 1) text-green-500 @else text-red-500 @endif whitespace-no-wrap">
+                                        {{ $item->status == 1 ? 'Active' : 'Inactive' }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
