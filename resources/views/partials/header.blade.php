@@ -10,7 +10,7 @@
          <div x-show="isOpen" class="absolute w-40 bg-white rounded-lg shadow-lg mr-2 mt-16">
              <div class="bg-gray-300 block px-4 py-2 rounded-t-lg">
                  <div class="w-24 ell-1 font-medium bg-gray-300">
-                     {{ Auth::user()->name }}
+                     {{ Auth::user()->first_name }}
                  </div>
              </div>
              <a href="/logout" class="block px-4 py-2 account-link hover:text-white hover:rounded-b-lg">Sign Out</a>

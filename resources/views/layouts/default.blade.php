@@ -55,7 +55,7 @@
             <div class="flex items-center">
                 @if (Auth::user())
                     <div class="pr-4">
-                        สวัสดีคุณ : {{ Auth::user()->name }}
+                        สวัสดีคุณ : {{ Auth::user()->first_name }}
                     </div>
                 @endif
                 <button @click="isOpen = !isOpen" class="text-gray-800 text-3xl focus:outline-none">
@@ -108,7 +108,7 @@
                 @if (Auth::user())
                     <span class="inline-block no-underline">
                         {{-- <i class="fa-solid fa-user text-2xl"></i> --}}
-                        สวัสดีคุณ : {{ Auth::user()->name }}
+                        สวัสดีคุณ : {{ Auth::user()->first_name }}
                     </span>
                     <span class="mx-3">|</span>
                     <a href="{{ route('pages.history') }}"

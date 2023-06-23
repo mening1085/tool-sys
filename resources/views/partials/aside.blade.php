@@ -5,12 +5,12 @@
                 <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400">
             @else
                 <span class="uppercase text-5xl text-white font-bold -mt-1">
-                    {{ substr(Auth::user()->name, 0, 1) }}
+                    {{ substr(Auth::user()->first_name, 0, 1) }}
                 </span>
             @endif
         </div>
         <div class="w-24 ell-1 text-2xl text-white font-medium mt-1 text-center">
-            {{ Auth::user()->name }}
+            {{ Auth::user()->first_name }}
         </div>
     </div>
     <nav class=" text-base font-normal">

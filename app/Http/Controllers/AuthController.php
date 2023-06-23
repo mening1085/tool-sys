@@ -40,7 +40,7 @@ class AuthController extends Controller
             return redirect()->route('pages.index');
         }
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('error', 'Email or password is incorrect');
     }
 
     public function register(Request $request)
